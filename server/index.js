@@ -12,6 +12,11 @@ var httpServer = app.listen(3000)
 //create a socket server
 var io = require('socket.io').listen(httpServer)
 
+//Client-Connection
+io.sockets.on('connection', (connectedSocket) => {
+	console.log('CONNECTION event')
+})
+
 app.get('/*', function(req, res) {
   res.sendFile(path.join(__dirname, '../client/dist/index.html'), function(err) {
     if (err) {
