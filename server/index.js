@@ -18,11 +18,12 @@ io.sockets.on('connection', (connectedSocket) => {
 })
 
 app.get('/*', function(req, res) {
-  res.sendFile(path.join(__dirname, '../client/dist/index.html'), function(err) {
-    if (err) {
-      res.status(500).send(err)
-    }
-  })
+  res.send('michCheck!')
+  // res.sendFile(path.join(__dirname, '../client/dist/index.html'), function(err) {
+  //   if (err) {
+  //     res.status(500).send(err)
+  //   }
+  // })
 })
 
 console.log('server running!')

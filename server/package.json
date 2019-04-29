@@ -1,0 +1,13 @@
+{
+  "name": "wp-socket-hooks-server",
+  "version": "0.0.1",
+  "description": "Server for a react/hooks/socketIO app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
