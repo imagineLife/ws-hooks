@@ -5,13 +5,14 @@ import io from 'socket.io-client'
 
 const App = ({pText}) => {
 	let [socket, setSocket] = useState(null)
-	let [connected, setConnected] = useState(false)
 
+	let sendSocketMessage = () => {
+		console.log('sending socket message')
+	}
 	//takes fn && arr
 	useEffect(() => {
 		//connect socket server
-		setSocket(io('http://localhost:3000'))
-		setConnected(true)
+		setSocket(io('localhost:3000'))
 		
 		//like componetWillUnMount
 		return () => {
@@ -19,8 +20,16 @@ const App = ({pText}) => {
 		}
 	}, [])
 
+	if(socket) {
+		console.log('IS socket')
+		console.log(socket)
+	}
+	
   	return (
-	    <p>Connected: {connected == true ? 'true' : 'false'}</p>
+  		<React.Fragment>
+		    <p>Connected: { socket && socket.connected ? 'true' : 'false'}</p>
+		    <button className="test-send-message" onClick={sendSocketMessage}>Send Message</button>
+		</React.Fragment>    
 	  );
 };
 
