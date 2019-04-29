@@ -13,20 +13,11 @@ const App = ({pText}) => {
 		setSocket(io('http://localhost:3000'))
 		setConnected(true)
 		
-		//like componnetWillUnMount
+		//like componetWillUnMount
 		return () => {
 			socket.on('disconnect', setConnected(false))
 		}
 	}, [])
-
-	// useEffect(()=> {
-	// 	// //add a listener to the socket for each event
-	// 	socket.on('connect', setConnected(true));
-	// })
-
-	// useEffect(() => {
-	// 	socket.on('disconnect', setConnected(false))
-	// })
 
   	return (
 	    <p>Connected: {connected == true ? 'true' : 'false'}</p>
