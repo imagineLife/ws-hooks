@@ -15,6 +15,13 @@ var io = require('socket.io').listen(httpServer)
 //Client-Connection
 io.sockets.on('connection', (connectedSocket) => {
 	console.log('CONNECTION event')
+
+	//when socket DISconnects
+	//once happens ONCE, not like an 'on'
+	connectedSocket.once('disconnect', () => {
+		connectedSocket.disconnect();
+		console.log(`socket disconnected`)
+	})
 })
 
 app.get('/*', function(req, res) {
