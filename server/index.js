@@ -13,8 +13,11 @@ var httpServer = app.listen(3000)
 var io = require('socket.io').listen(httpServer)
 
 //Client-Connection
-io.sockets.on('connection', (connectedSocket) => {
-	console.log('CONNECTION event')
+io.sockets.on('connect', (connectedSocket) => {
+	console.log('CONNECT  event')
+	console.log('connectedSocket.id')
+	console.log(connectedSocket.id)
+	
 
 	//when socket DISconnects
 	//once happens ONCE, not like an 'on'
