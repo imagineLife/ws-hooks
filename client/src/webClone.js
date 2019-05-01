@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 // import logo from './logo.svg';
 import './main.css';
 
+import Messages from './components/Messages'
 const io = require('socket.io-client');
 const socket = io('http://localhost:3011');
 
@@ -60,65 +61,13 @@ function Room() {
       {!inRoom && `Enter Room` }
     </button>
 
-    <Messages inRoom={inRoom} />
+    <Messages inRoom={inRoom} socket={socket}/>
 
   </div>
   );
 }
 
-function Messages(props) {
 
-  const [messageCount, setMessageCount] = useState(0);
-  const [theme, setTheme] = useState('dark');
-
-  useEffect(() => {
-
-    socket.on('receive message', payload => {
-      setMessageCount(messageCount + 1);
-    });
-  });
-
-  useEffect(() => {
-    console.log('received new message');
-    document.title = `${messageCount} new messages have been emitted`;
-  }, [messageCount]); //only re-run the effect if new message comes in
-
-  const handleSetTheme = () => {
-    let newTheme;
-    (theme === 'light')
-      ? newTheme = 'dark'
-      : newTheme = 'light';
-
-    console.log('new theme: ' + newTheme);
-    setTheme(newTheme);
-  }
-
-  const handleNewMessage = () => {
-    console.log('emitting new message');
-    socket.emit('new message', {
-      room: 'test-room'
-    });
-
-    setMessageCount(messageCount + 1);
-  }
-
-  return(
-    <div className={`App Theme-${theme}`}>
-
-        <p>{messageCount} messages have been emitted</p>
-
-        {props.inRoom &&
-        <button onClick={() => handleNewMessage()}>
-          Emit new message
-        </button>
-        }
-
-        <button onClick={() => handleSetTheme()}>
-          Toggle Theme
-        </button>
-    </div>
-  );
-}
 
 export default App2;
 ReactDOM.render(<App2 />, document.getElementById("app"));
