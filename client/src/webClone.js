@@ -5,38 +5,45 @@ import './main.css';
 
 import Messages from './components/Messages'
 const io = require('socket.io-client');
-const socket = io('http://localhost:3011');
+// let socket = null;
 
 function App2() {
+  let [socket, setSocket ] = useState(null)
 
+  console.log('socket')
+  console.log(socket)
+  
+  useEffect(() => {
+    setSocket(io('http://localhost:3011'))
+    return () => {
+      socket = null;
+    }
+  }, [])
   return (
     <div>
-      <header className="App-header">
-        
-      </header>
-
-      <Room />
+      <header className="App-header"></header>
+      <Room socketProp={socket}/>
     </div>
   );
 }
 
-function Room() {
+function Room({socketProp}) {
   console.log('ROOM!');
  
   const [inRoom, setInRoom] = useState(false);
 
    useEffect(() => {
 
-    if(inRoom) {
+    if(inRoom && socketProp !== null) {
       console.log('joining room');
-      socket.emit('join room', {room: 'test-room'});
+      socketProp.emit('join-room', {room: 'test-room'});
     }
 
     return () => {
 
-      if(inRoom) {
+      if(inRoom && socketProp  !== null) {
         console.log('leaving room');
-        socket.emit('leave room', {
+        socketProp.emit('leave-room', {
           room: 'test-room'
         })
       }
@@ -44,7 +51,7 @@ function Room() {
   });
 
   const handleInRoom = () => {
-    inRoom
+    inRoom && socketProp  !== null
       ? setInRoom(false)
       : setInRoom(true);
   }
@@ -61,7 +68,7 @@ function Room() {
       {!inRoom && `Enter Room` }
     </button>
 
-    <Messages inRoom={inRoom} socket={socket}/>
+    <Messages inRoom={inRoom} socket={socketProp}/>
 
   </div>
   );
