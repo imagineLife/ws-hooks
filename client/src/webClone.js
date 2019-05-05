@@ -1,24 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from "react-dom";
-// import logo from './logo.svg';
+import Room from './components/Room'
 import './main.css';
-
-import Messages from './components/Messages'
 const io = require('socket.io-client');
-// let socket = null;
 
 function App2() {
-  let [socket, setSocket ] = useState(null)
-
-  console.log('socket')
-  console.log(socket)
+  console.log('%c APP RENDER', 'background-color: steelblue; color: white;')
   
+  let [socket, setSocket ] = useState(null)
+  
+
   useEffect(() => {
-    setSocket(io('http://localhost:3011'))
+    setSocket(io('http://localhost:3011'));
     return () => {
-      socket = null;
+      console.log('DISCONNECTING');
+      socket.disconnect();
     }
   }, [])
+
+  useEffect(() => {
+    if(socket !== null){
+      socket.on('share-users-in-room', (roomUsers) => {
+        console.log('roomUsers')
+        console.log(roomUsers)
+      })
+
+      socket.on('disconnect', (reason) => {
+        console.log('disconnect reason')
+        console.log(reason)
+        console.log('// - - - - - //')
+      })
+    }
+  })
+
+  //Cmp-will-UnMount
   return (
     <div>
       <header className="App-header"></header>
@@ -26,54 +41,6 @@ function App2() {
     </div>
   );
 }
-
-function Room({socketProp}) {
-  console.log('ROOM!');
- 
-  const [inRoom, setInRoom] = useState(false);
-
-   useEffect(() => {
-
-    if(inRoom && socketProp !== null) {
-      console.log('joining room');
-      socketProp.emit('join-room', {room: 'test-room'});
-    }
-
-    return () => {
-
-      if(inRoom && socketProp  !== null) {
-        console.log('leaving room');
-        socketProp.emit('leave-room', {
-          room: 'test-room'
-        })
-      }
-    }
-  });
-
-  const handleInRoom = () => {
-    inRoom && socketProp  !== null
-      ? setInRoom(false)
-      : setInRoom(true);
-  }
-
- return(
-  <div>
-    <h1>
-      {inRoom && `You Have Entered The Room` }
-      {!inRoom && `Outside Room` }
-    </h1>
-
-    <button onClick={() => handleInRoom()}>
-      {inRoom && `Leave Room` }
-      {!inRoom && `Enter Room` }
-    </button>
-
-    <Messages inRoom={inRoom} socket={socketProp}/>
-
-  </div>
-  );
-}
-
 
 
 export default App2;
