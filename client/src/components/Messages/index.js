@@ -1,15 +1,24 @@
 import React, {useState, useEffect} from 'react';
 
-function Messages(props) {
+function Messages({inRoom, socketProp, curRoom}) {
 
+  console.log('%c MSGS start', 'background-color: tan; color: white;')
+  
   const [messageCount, setMessageCount] = useState(0);
   const [theme, setTheme] = useState('dark');
 
   useEffect(() => {
-
-    props.socket.on('receive message', payload => {
-      setMessageCount(messageCount + 1);
-    });
+    if(socketProp){
+      socketProp.on('receive message', payload => {
+        console.log('- - - receive message payload - - -')
+        console.log(payload)
+        console.log(' cur messageCount')
+        console.log(messageCount)
+        
+        
+        setMessageCount(messageCount + 1);
+      });
+    }
   });
 
   useEffect(() => {
@@ -18,10 +27,7 @@ function Messages(props) {
   }, [messageCount]); //only re-run the effect if new message comes in
 
   const handleSetTheme = () => {
-    let newTheme;
-    (theme === 'light')
-      ? newTheme = 'dark'
-      : newTheme = 'light';
+    let newTheme = (theme === 'light') ? 'dark' : 'light';
 
     console.log('new theme: ' + newTheme);
     setTheme(newTheme);
@@ -29,22 +35,25 @@ function Messages(props) {
 
   const handleNewMessage = () => {
     console.log('emitting new message');
-    props.socket.emit('new message', {
-      room: 'test-room'
-    });
+    socketProp.emit('new-message', { room: curRoom });
 
     setMessageCount(messageCount + 1);
   }
+
+  console.log('PRE-RENDER messageCount')
+  console.log(messageCount)
+  console.log('// - - - - - //')
+  
 
   return(
     <div className={`App Theme-${theme}`}>
 
         <p>{messageCount} messages have been emitted</p>
 
-        {props.inRoom &&
-        <button onClick={() => handleNewMessage()}>
-          Emit new message
-        </button>
+        {inRoom &&
+          <button onClick={() => handleNewMessage()}>
+            Emit new message
+          </button>
         }
 
         <button onClick={() => handleSetTheme()}>
