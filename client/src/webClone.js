@@ -1,4 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import {
+    BrowserRouter as Router,
+    Route,
+    Redirect,
+    Switch
+} from 'react-router-dom';
 import ReactDOM from "react-dom";
 import Room from './components/Room'
 import './main.css';
@@ -37,7 +43,14 @@ function App2() {
   return (
     <div>
       <header className="App-header"></header>
-      <Room socketProp={socket}/>
+      <Router>
+        <Switch>
+          <Route exat path="/callCenter" render={() => <Room socketProp={socket}/>} />
+          <Route exact path="/" render={() => <Room socketProp={socket}/> }/>
+          <Redirect from="/*" to="/" />
+          <Route render={() =>  <Room socketProp={socket} /> } />
+        </Switch>
+      </Router>
     </div>
   );
 }
