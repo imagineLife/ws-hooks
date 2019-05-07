@@ -18,7 +18,7 @@ export default function CallCenter({socketProp}) {
         </React.Fragment>}    
 
       {/* NOT in-the-call-center*/}
-      {!inStatus && <EnterRoomForm enterRoom={enterRoom} />}
+      {!inStatus && <EnterRoomForm enterRoom={enterRoom} formType={'callCenter'}/>}
     </div>
   );
 }
