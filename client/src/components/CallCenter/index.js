@@ -2,16 +2,23 @@ import React, {useState, useEffect} from 'react';
 import EnterRoomForm from '../EnterRoomForm'
 
 export default function CallCenter({socketProp}) {
-  console.log('Call Center!');
+
   const [inStatus, setInStatus] = useState(false)
-
+  
   const enterRoom = () => setInStatus(true)
+  
+  return(
+    <div>
+      {/* in-the-call-center*/}
+      {inStatus && <React.Fragment>
+        <h1>CallCenter</h1>
+        <div className="client-list">
+          <p>Client list goes here...</p>
+        </div>
+        </React.Fragment>}    
 
- return(
-  <div>
-      {inStatus && <h1>CallCenter</h1>}
-    
-    {!inStatus && <EnterRoomForm enterRoom={enterRoom} />}
-  </div>
+      {/* NOT in-the-call-center*/}
+      {!inStatus && <EnterRoomForm enterRoom={enterRoom} />}
+    </div>
   );
 }
