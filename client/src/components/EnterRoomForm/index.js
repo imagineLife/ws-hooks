@@ -1,21 +1,29 @@
 import React, {useState, useEffect} from 'react';
 
-export default function EnterRoomForm({enterRoom}) {
-  console.log('Call Center!');
-  const [pwVal, setPwVal] = useState('')
+export default function EnterRoomForm({enterRoom, formType}) {
+  console.log('EnterRoomForm!');
+  const [inputVal, setInputVal] = useState('')
 
   const onSubmit = (e) => {
   	e.preventDefault()
-  	if(pwVal == 'trialPW'){
+  	if(formType="client"){
+      enterRoom();
+    }
+
+    if(inputVal == 'trialPW'){
   		enterRoom();
   	}else{
-  		setPwVal('')
+  		setinputVal('')
   	}
   }
 
  return(
   <form onSubmit={onSubmit}>
-  	<input placeholder="enter password..." value={pwVal} onChange={e => setPwVal(e.target.value)}/>
+  	<input 
+      type={(formType == 'callCenter') ? 'password' : 'text'}
+      placeholder="enter password..." 
+      value={inputVal} 
+      onChange={e => setInputVal(e.target.value)}/>
   </form>
   );
 }
