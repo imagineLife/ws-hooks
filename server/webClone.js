@@ -3,6 +3,8 @@ const app = express();
 const port = 3011;
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
+let u = require('util')
+let debug = u.debuglog('DEBUG')
 
 /*
   Tracker object of rooms && users
@@ -25,7 +27,7 @@ io.on('connection', connectedSocket => {
     Disconnect
   */  
   connectedSocket.on('disconnect', reason => {
-    console.log('user disconnected');
+    debug('- - user disconnected - -');
     //leave node-stored room
     let curUserID = connectedSocket.id
     let hasLeftRoom = false;
@@ -45,7 +47,7 @@ io.on('connection', connectedSocket => {
 
     console.log('node-store rooms after disconnecting')
     console.log(rooms)
-    console.log('// - Disconnect End- - - - //')
+    debug('// - Disconnect End- - - - //')
 
   });
 
@@ -53,7 +55,7 @@ io.on('connection', connectedSocket => {
     Join Room
   */
   connectedSocket.on('join-room', data => {
-    console.log('joining');
+    debug('joining');
     console.log(data);
     // io.sockets.emit('share-users-in-room', usersInRoom)
 
@@ -71,7 +73,7 @@ io.on('connection', connectedSocket => {
     console.log(rooms)
     
     connectedSocket.join(data.room);
-    console.log('// - jOiN DoNe- - - - //')
+    debug('// - jOiN DoNe- - - - //')
     
   });
 
@@ -105,7 +107,7 @@ io.on('connection', connectedSocket => {
     Leave room
   */
   connectedSocket.on('leave-room', data => {
-    console.log('// - leaving room Start- - - - //')
+    debug('// - leaving room Start- - - - //')
     console.log(data);
     // usersInRoom.filter(usr => usr !== connectedSocket.id)
     // io.sockets.emit('share-users-in-room', usersInRoom)
@@ -128,14 +130,14 @@ io.on('connection', connectedSocket => {
     }
     console.log('node-store rooms after leaving')
     console.log(rooms)
-    console.log('// - leaving room End- - - - //')
+    debug('// - leaving room End- - - - //')
   });
 
   /*
     new-message
   */
   connectedSocket.on('new-message', data => {
-    console.log('// - - new-message recieved - - //')
+    debug('// - - new-message recieved - - //')
     console.log(data);
     console.log('connectedSocket.id')
     console.log(connectedSocket.id)
@@ -155,10 +157,16 @@ io.on('connection', connectedSocket => {
     // sending to all clients in 'data.room', including sender
     connectedSocket.to(data.room).emit('recieve message', data);
 
-    console.log('// - - new-message end - - //')
+    debug('// - - new-message end - - //')
     
 
   });
+
+  connectedSocket.on('join-call-center', data => {
+    console.log('JOINED DATA CENTER!')
+    console.log(data)
+    
+  })
 
   console.log('// - Connection- - - Ended- //')
   
