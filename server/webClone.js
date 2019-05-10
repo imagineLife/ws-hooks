@@ -165,6 +165,11 @@ io.on('connection', connectedSocket => {
   connectedSocket.on('join-call-center', data => {
     console.log('JOINED DATA CENTER!')
     console.log(data)
+    console.log('rooms')
+    console.log(rooms)
+    
+    connectedSocket.emit('pass-current-room-list', rooms);
+
     
   })
 
