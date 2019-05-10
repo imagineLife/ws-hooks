@@ -4,6 +4,29 @@ import EnterRoomForm from '../EnterRoomForm'
 export default function CallCenter({socketProp}) {
 
   const [inStatus, setInStatus] = useState(false)
+  const [listening, setListening] = useState(false)
+  const [roomListData, setRoomListData] = useState(false)
+
+  //if NOT in room
+  useEffect(() => {
+    if(socketProp && inStatus == true && listening == false){
+      console.log('socketProp');
+      console.log(socketProp);
+      socketProp.emit('join-call-center', socketProp.id)
+      setListening(true)
+    }
+  }, [inStatus])
+
+  useEffect(() => {
+    if(socketProp && inStatus == true && listening == true){
+      console.log('setting listener for pass-current-room-data');
+      socketProp.on('pass-current-room-list', roomListData => {
+        console.log('roomListData')
+        console.log(roomListData)
+        setRoomListData(roomListData)
+      })
+    }
+  }, [inStatus, listening])
   
   const enterRoom = () => setInStatus(true)
   
