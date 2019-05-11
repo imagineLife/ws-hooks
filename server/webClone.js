@@ -10,6 +10,7 @@ let debug = u.debuglog('DEBUG')
   Tracker object of rooms && users
 */
 let rooms = {}
+let callCenterFolks = []
 
 console.log('// - - **  - - **  - //')
 
@@ -167,7 +168,10 @@ io.on('connection', connectedSocket => {
     console.log(data)
     console.log('rooms')
     console.log(rooms)
-    
+    callCenterFolks = callCenterFolks = [...callCenterFolks, data]
+    console.log('callCenterFolks')
+     console.log(callCenterFolks)
+      
     connectedSocket.emit('pass-current-room-list', rooms);
 
     
