@@ -1,35 +1,51 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import ReactDOM from "react-dom";
-import io from 'socket.io-client'
-// import Title from './components/Title'
+// import io from 'socket.io-client'
+
+const io = require('socket.io-client');
+let socket = io('http://localhost:3000');
 
 const App = ({pText}) => {
-	let [socket, setSocket] = useState(null)
 
-	let sendSocketMessage = () => {
+	const [connections, setConnections] = useState(0)
+
+	console.log('%c APP!', 'background-color: black;color: white;')
+	console.log('connections')
+	console.log(connections)
+	// console.log('// - - - - - //')
+
+	const sendSocketMessage = () => {
 		console.log('sending socket message')
 	}
-	//takes fn && arr
-	useEffect(() => {
-		//connect socket server
-		setSocket(io('localhost:3000'))
-		
-		//like componetWillUnMount
-		return () => {
-			socket.on('disconnect', setConnected(false))
-		}
-	}, [])
 
-	if(socket) {
-		console.log('IS socket')
-		console.log(socket)
-	}
+	useEffect(() => {
+		console.log('-- on connections CHANGE --');
+		socket.on('passConnections', (connections) => {
+			console.log('%c passConnections setting...', 'background-color: green; color:white;')
+			console.log('connections')
+			console.log(connections)
+			
+			setConnections(connections)
+		});
+		return () => {
+			//like componetWillUnMount
+			console.log('DISCONNECTING');
+			socket.disconnect()
+		};
+	}, [connections])
+	
+	console.log('connections')
+	console.log(connections)
+	// console.log('socket')
+	// console.log(socket)
+	console.log('// - - - - - //')
 	
   	return (
-  		<React.Fragment>
-		    <p>Connected: { socket && socket.connected ? 'true' : 'false'}</p>
+  		<Fragment>
+  			<p>Connections: {connections.length} </p>
+		    <p>Connected: {socket ? 'true' : 'false'}</p>
 		    <button className="test-send-message" onClick={sendSocketMessage}>Send Message</button>
-		</React.Fragment>    
+		</Fragment>    
 	  );
 };
 
