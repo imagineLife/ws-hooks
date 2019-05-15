@@ -7,7 +7,9 @@
     "test": "jest",
     "build": "webpack-dev-server --mode production",
     "dev": "webpack --mode development",
-    "start": "webpack-dev-server --mode development --open"
+    "start": "webpack-dev-server --mode development --open",
+    "lint" : "cross-env NODE_ENV=development eslint --cache .",
+    "lintfix" : "cross-env NODE_ENV=development eslint --cache --fix ."
   },
   "repository": {
     "type": "git",
@@ -21,8 +23,15 @@
   },
   "homepage": "https://github.com/imagineLife/wp-babel-react#readme",
   "devDependencies": {
+    "babel-eslint": "^10.0.1",
     "babel-loader": "^7.1.4",
+    "cross-env": "^5.2.0",
     "css-loader": "^0.28.11",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-react": "^7.13.0",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.4.0",
